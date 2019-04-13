@@ -1,15 +1,15 @@
-import './App.css';
+import "./App.css";
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import Logo from './components/Logo/Logo';
-import Navigation from './components/Navigation/Navigation';
-import Particles from 'react-particles-js';
-import Rank from './components/Rank/Rank';
-import Register from './components/Register/Register';
-import Signin from './components/Signin/Signin';
+import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
+import Logo from "./components/Logo/Logo";
+import Navigation from "./components/Navigation/Navigation";
+import Particles from "react-particles-js";
+import Rank from "./components/Rank/Rank";
+import Register from "./components/Register/Register";
+import Signin from "./components/Signin/Signin";
 
 const particlesOptions = {
   particles: {
@@ -24,17 +24,17 @@ const particlesOptions = {
 }
 
 const initialState = {
-  input: '',
-  imageUrl: '',
+  input: "",
+  imageUrl: "",
   boxes: [],
-  route: 'signin',
+  route: "signin",
   isSignedIn: false,
   user: {
-    id: '',
-    name: '',
-    email: '',
+    id: "",
+    name: "",
+    email: "",
     entries: 0,
-    joined: ''
+    joined: ""
   }
 }
 
@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   calculateFaceLocations = (data) => {
-    const image = document.getElementById('inputimage');
+    const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
     return data.outputs[0].data.regions.map(face => {
@@ -79,9 +79,9 @@ class App extends Component {
 
   onPictureSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('http://localhost:3000/imageurl', {
+      fetch("http://localhost:3000/imageurl", {
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': "application/json"},
         body: JSON.stringify({
           input: this.state.input
         })
@@ -89,9 +89,9 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
+          fetch("http://localhost:3000/image", {
+            method: "put",
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
               id: this.state.user.id
             })
@@ -109,10 +109,10 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.setState(initialState)
-    } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+    if (route === "signout") {
+      return this.setState(initialState);
+    } else if (route === "home") {
+      this.setState({isSignedIn: true});
     }
     this.setState({route: route});
   }
@@ -121,11 +121,11 @@ class App extends Component {
     const { isSignedIn, imageUrl, route, boxes, user } = this.state;
     return (
       <div className="App">
-         <Particles className='particles'
+         <Particles className="particles"
           params={particlesOptions}
         />
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
-        { route === 'home'
+        { route === "home"
           ? <div>
               <Logo />
               <Rank
@@ -139,7 +139,7 @@ class App extends Component {
               <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
             </div>
           : (
-             route === 'signin'
+             route === "signin"
              ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
