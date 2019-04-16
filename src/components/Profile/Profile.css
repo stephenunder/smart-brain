@@ -14,6 +14,8 @@
   font-size: 3rem;
   font-style: bold;
   cursor: pointer;
+  height: 6px;
+  width: 6px;
 }
 
 .modal-close:hover {
