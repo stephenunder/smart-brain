@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import "./Signin.css";
 
 class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signInEmail: '',
-      signInPassword: ''
+      signInEmail: "",
+      signInPassword: ""
     }
   }
 
@@ -18,10 +18,14 @@ class Signin extends Component {
     this.setState({signInPassword: event.target.value})
   }
 
+  saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem("token", token)
+  }
+
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
+    fetch("http://localhost:3000/signin", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         email: this.state.signInEmail,
         password: this.state.signInPassword
@@ -30,10 +34,12 @@ class Signin extends Component {
       .then(response => response.json())
       .then(data => {
         if (data && data.success === "true") {
+          this.saveAuthTokenInSession(data.token)
           this.props.loadUser(data)
           this.props.onRouteChange("home");
         }
       })
+      .catch(console.log)
   }
 
   render() {
@@ -74,7 +80,7 @@ class Signin extends Component {
               />
             </div>
             <div className="lh-copy mt3">
-              <p  onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
+              <p  onClick={() => onRouteChange("register")} className="f6 link dim black db pointer">Register</p>
             </div>
           </div>
         </main>
